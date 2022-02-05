@@ -4,7 +4,11 @@ import { useClient } from './config';
 function Controls(props) {
 //   console.log(props);
 const client = useClient();
-const {tracks,setStart,setInCall} = props;
+
+// console.log('CLient from COntrol',client);
+
+const {clientId,tracks,setStart,setInCall} = props;
+    console.log(clientId);
 const [trackState, setTrackState] = useState({
     video : true,
     audio:true
@@ -23,14 +27,23 @@ const mute = async (type) =>{
             }
         })
     }
+    console.log(tracks);
 }
 const leaveChannel = async () =>{
+    
+    console.log('leave', client);
+
     await client.leave();
+
+    console.log('leave',client);
+
     client.removeAllListeners();
     tracks[0].close();
     tracks[1].close();
     setStart(false);
-    setInCall(false)
+    setInCall(false);
+    // const leave = { ...client }
+    // console.log(leave);
 }
 
   return <div>

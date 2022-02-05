@@ -6,12 +6,12 @@ import VideoCall from './VideoCall';
 function App() {
   const [inCall,setInCall] = useState(false)
   const [channelName,setChannelName] = useState("");
+  
   return (
     <div className='App' style={{height:"100%"}}>
 
-      {inCall ? <VideoCall setInCall={setInCall} /> : <button onClick={() => setInCall(true)}>Join Call</button>}
+      {inCall ? <VideoCall setInCall={setInCall} channelName={channelName} /> : <ChannelForm setInCall={setInCall} setChannelName={setChannelName} />}
 
-      <ChannelForm setInCall={setInCall} setChannelName={setChannelName}/>
     {/* <VideoCall/> */}
     </div>
   );

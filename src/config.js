@@ -1,11 +1,26 @@
-import { AgoraVideoPlayer, createClient, createMicrophoneAndCameraTracks } from "agora-rtc-react";
+import { AgoraVideoPlayer, createClient, createMicrophoneAndCameraTracks  } from "agora-rtc-react";
+
+import AgoraRTC, {
+    IAgoraRTCClient, IAgoraRTCRemoteUser, MicrophoneAudioTrackInitConfig, CameraVideoTrackInitConfig, IMicrophoneAudioTrack, ICameraVideoTrack, ILocalVideoTrack, ILocalAudioTrack, IRemoteAudioTrack
+} from 'agora-rtc-sdk-ng';
+
+// import { IAgoraRTCRemoteUser} from 'agora-rtc-sdk-ng'
 
 const appId = "14d4edd9107f4e0ca7a54ebde7f3dd70"
 
-const token = "00614d4edd9107f4e0ca7a54ebde7f3dd70IADqXTkO5Mfdu37m4Cg7mUkQrXM+SxNi5kAM91aqhMLZjWTNKL8AAAAAEADbqsx0CI/7YQEAAQAIj/th"
+const token = "00614d4edd9107f4e0ca7a54ebde7f3dd70IAAKF5RhxAmmOQn3q9vTu0pRgoxqeiGTE6N5u3rF+BKJjWTNKL8AAAAAEABJ0h4OYr/+YQEAAQBiv/5h"
 
 export const config = { mode: "rtc", codec: "vp8" , appId:appId , token:token}
 
 export const useClient = createClient(config);
+
+export const remoteClient = AgoraRTC.createClient(IAgoraRTCRemoteUser)
+
 export const useMicrophoneAndCameraTracks = createMicrophoneAndCameraTracks()
+
+// export const remoteUser = IAgoraRTCClient()
+// export const remoteAudioTrack = RemoteAudioTrackStats;
+// export const remoteVideoTrack = RemoteVideoTrackStats;
+// export const iagoraRemoteUser = IAgoraRTCRemoteUser;
+
 export const channelName = "main"
