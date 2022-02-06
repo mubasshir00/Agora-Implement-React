@@ -27,7 +27,7 @@ const mute = async (type) =>{
             }
         })
     }
-    console.log(tracks);
+    console.log('Controls', tracks);
 }
 const leaveChannel = async () =>{
     

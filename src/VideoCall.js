@@ -14,7 +14,7 @@ function VideoCall(props) {
 
   let videoCallData = {}
   const { setInCall, channelName} = props
-  const [users,setUsers] = useState([]);
+  let [users,setUsers] = useState([]);
   const [start,setStart] = useState(false)
   const client = useClient();
   const {ready,tracks} = useMicrophoneAndCameraTracks()
@@ -136,7 +136,7 @@ function VideoCall(props) {
       <Grid item style={{height:"5%"}}>
       {
       ready && tracks && (
-            <Controls tracks={tracks} setStart={setStart} setInCall={setInCall}/>
+        <Controls tracks={tracks} setStart={setStart} setInCall={setInCall}/>
       )
       }
       </Grid>

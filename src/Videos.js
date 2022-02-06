@@ -5,13 +5,14 @@ import { remoteClient, useClient, useMicrophoneAndCameraTracks } from './config'
 import Controls from './Controls';
 
 import { IAgoraRTCRemoteUser } from 'agora-rtc-sdk-ng'
+import ControlRemoteUser from './ControlRemoteUser';
 
 function Videos(props) {
-  console.log(props);
+  console.log('Videos  tacks',props);
 
-//   console.log('remoteClient', remoteClient);
+  console.log('remoteClient', remoteClient);
 
-  const {users} = props;
+  let {users} = props;
   const client = useClient()
   const {ready,tracks}= useMicrophoneAndCameraTracks();
   console.log('oooooooooooo',users);
@@ -21,6 +22,17 @@ function Videos(props) {
       setGridSpacing(Math.max(Math.floor(12/(users.length+1)),4));
 
   }, [users, tracks,client,ready])
+
+  const removeFromChannl = async(user) =>{
+    await client.unsubscribe(user)
+    await client.leave();
+    client.removeAllListeners();
+    users = users.filter((User)=>User.uid !== user.uid)
+
+
+   console.log('users', users);
+
+  }
 
   console.log('from videos',users);
 
@@ -36,14 +48,22 @@ function Videos(props) {
             if(user.videoTrack){
                 return (
                 <Grid item xs={gridSpacing}>
-                
-                        <Grid item style={{ height: "5%" }}>
+
+                <div>
+                    <button>Mic Off</button>
+                    <button>Video Off</button>
+                    <button onClick={()=>removeFromChannl(user)}>Remove User</button>
+                </div>
+
+                {/* <ControlRemoteUser/> */}
+                {/* <p>asdsdsd dfede edfe</p> */}
+                        {/* <Grid item style={{ height: "5%" }}>
                             {
                                 ready && tracks && (
                                     <Controls tracks={tracks} />
                                 )
                             }
-                        </Grid>
+                        </Grid> */}
 
                 <AgoraVideoPlayer 
                 videoTrack={user.videoTrack}
