@@ -11,7 +11,7 @@ function Videos(props) {
   console.log('Videos  tacks',props);
 
   console.log('remoteClient', remoteClient);
-
+  const [removeMessage,setRemoveMessage] = useState("")
   let {users} = props;
   const client = useClient()
   const {ready,tracks}= useMicrophoneAndCameraTracks();
@@ -23,12 +23,19 @@ function Videos(props) {
 
   }, [users, tracks,client,ready])
 
+  const mute = async(type) =>{
+      if(type === "audio"){
+         
+      } else if(type === "video"){
+
+      }
+  }
+
   const removeFromChannl = async(user) =>{
     await client.unsubscribe(user)
     await client.leave();
     client.removeAllListeners();
     users = users.filter((User)=>User.uid !== user.uid)
-
 
    console.log('users', users);
 
@@ -50,9 +57,19 @@ function Videos(props) {
                 <Grid item xs={gridSpacing}>
 
                 <div>
-                    <button>Mic Off</button>
-                    <button>Video Off</button>
+                    <button 
+                    onClick={()=>mute("audio")}
+                    >Mic Off</button>
+
+                    <button
+                    onClick={()=>mute("video")}
+                    >Video Off</button>
+                    
                     <button onClick={()=>removeFromChannl(user)}>Remove User</button>
+                </div>
+
+                <div>
+                    <p>{removeMessage}</p>
                 </div>
 
                 {/* <ControlRemoteUser/> */}

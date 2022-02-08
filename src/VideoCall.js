@@ -6,6 +6,7 @@ import Videos from './Videos';
 import database from './firebase'
 import { ref, set,push } from 'firebase/database';
 import { AgoraRTCRemoteUser, IAgoraRTCRemoteUser} from 'agora-rtc-sdk-ng';
+import axios from 'axios';
 // const database = getDatabase();
 
 function VideoCall(props) {
@@ -27,6 +28,7 @@ function VideoCall(props) {
       // remoteClient.on("user-joined",async(user,mediaType)=>{
       //   console.log('teeeeeeeeest');
       // })
+
 
       client.on("user-published",async(user,mediaType)=>{
         // console.log('user',user);
@@ -71,6 +73,55 @@ function VideoCall(props) {
       //   })
       // })
       // _joinInfo
+
+      client.on("connection-state-change", async (curState, revState, reason) => {
+
+
+        const testUser = {
+          "userId": "aa",
+          "name": "QQQQQWWW"
+        }
+
+        // fetch('http://localhost:8080/api/v1/users', {
+        //   method: 'POST',
+        //   headers: {
+        //     "Content-Type": "application/json"
+        //   },
+        //   body: JSON.stringify(testUser)
+        // }).then(() => {
+        //   console.log('NEW ');
+        // })
+
+        // axios.post('http://localhost:8080/api/v1/users',testUser)
+        // .then(function(response){
+        //   console.log(response);
+        // })
+        // .catch(function(error){
+        //   console.log(error);
+        // })
+
+        //SDK is connecting to the server
+        if (curState === "CONNECTING") {
+
+        }
+        //connecting to the server and join a channel
+        else if (curState === "CONNECTED") {
+
+        }
+        //
+        else if (curState === "DISCONNECTED") {
+
+        }
+        else if (curState === "DISCONNECTING") {
+
+        }
+        else if (curState === "RECONNECTING") {
+
+        }
+        console.log('curState', curState);
+        console.log('revState', revState);
+        console.log('reason', reason);
+      })
       
       try{
         await client.join(config.appId, name, config.token, null)
@@ -101,11 +152,20 @@ function VideoCall(props) {
 
         // const db = getDatabase()
 
-        push(ref(database,'joiningInfo'),videoCallData)
+        // push(ref(database,'joiningInfo'),videoCallData)
         // console.log(client.uid);
         // console.log('client', joinInfo );
         // var tempData = client.uid
         // console.log('aalll allll',client);
+
+        axios.post('http://localhost:8080/api/v1/users', videoCallData)
+        .then(function(response){
+          console.log(response);
+        })
+        .catch(function(error){
+          console.log(error);
+        })
+
       } catch(error) {
         console.log("Error");
       }
