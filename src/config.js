@@ -8,7 +8,7 @@ import AgoraRTC, {
 
 const appId = "14d4edd9107f4e0ca7a54ebde7f3dd70"
 
-const token = "00614d4edd9107f4e0ca7a54ebde7f3dd70IADNXulMl+Z/sFCODZcWpMZU6mql5DkwTp+iwvkXentRhWTNKL8AAAAAEAA1a+TASk4DYgEAAQBKTgNi"
+const token = "00614d4edd9107f4e0ca7a54ebde7f3dd70IAAxbki8qkyCbA7OrjZU2/GIYmw6DZXjF8Vrf/UB2PPLl2TNKL8AAAAAIgAxc9bWHzUGYgQAAQAdNQZiAgAdNQZiAwAdNQZiBAAdNQZi"
 
 export const config = { mode: "rtc", codec: "vp8" , appId:appId , token:token}
 

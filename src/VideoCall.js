@@ -14,6 +14,7 @@ function VideoCall(props) {
   console.log('remoteClient', remoteClient);
 
   let videoCallData = {}
+  let [connectingState,setConnectingState] = useState([])
   const { setInCall, channelName} = props
   let [users,setUsers] = useState([]);
   const [start,setStart] = useState(false)
@@ -32,6 +33,8 @@ function VideoCall(props) {
 
       client.on("user-published",async(user,mediaType)=>{
         // console.log('user',user);
+
+
         await client.subscribe(user,mediaType)
 
         if(mediaType === "video"){
@@ -75,58 +78,131 @@ function VideoCall(props) {
       // _joinInfo
 
       client.on("connection-state-change", async (curState, revState, reason) => {
-
-
-        const testUser = {
-          "userId": "aa",
-          "name": "QQQQQWWW"
-        }
-
-        // fetch('http://localhost:8080/api/v1/users', {
-        //   method: 'POST',
-        //   headers: {
-        //     "Content-Type": "application/json"
-        //   },
-        //   body: JSON.stringify(testUser)
-        // }).then(() => {
-        //   console.log('NEW ');
-        // })
-
-        // axios.post('http://localhost:8080/api/v1/users',testUser)
-        // .then(function(response){
-        //   console.log(response);
-        // })
-        // .catch(function(error){
-        //   console.log(error);
-        // })
-
+        const {_gateway} =  {...client}
+        const { inChannelInfo, joinInfo, joinGatewayStartTime } = { ..._gateway }
+        // console.log('state change', joinInfo.uid);
         //SDK is connecting to the server
+
+        // let connectionStateData = {
+        //   uid: joinInfo.uid,
+        //   currentState : curState,
+        //   timeStamp : Date.now()
+        // }
+        
+        // axios.post('http://localhost:8080/api/v1/connectionstate', connectionStateData)
+        //   .then(function (response) {
+        //     console.log(response);
+        //   })
+        //   .catch(function (error) {
+        //     console.log(error);
+        //   })
+        
         if (curState === "CONNECTING") {
+
+          console.log('Connecting', Date.now());
+
+          axios.post('http://localhost:8080/api/v1/connectionstate', {
+            uid:joinInfo.uid,
+            currentState: "CONNECTING",
+            previousState: revState,
+            reason: reason,
+            timeStamp:Date.now()
+          })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
 
         }
         //connecting to the server and join a channel
         else if (curState === "CONNECTED") {
+      
+          console.log('CONNECTED', Date.now());
+
+          axios.post('http://localhost:8080/api/v1/connectionstate', {
+            uid: joinInfo.uid,
+            currentState: "CONNECTED",
+            previousState: revState,
+            reason: reason,
+            timeStamp: Date.now()
+          })
+            .then(function (response) {
+              console.log(response);
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
 
         }
         //
         else if (curState === "DISCONNECTED") {
+         
+          console.log('DISCONNECTED', Date.now());
 
+          axios.post('http://localhost:8080/api/v1/connectionstate', {
+            uid: joinInfo.uid,
+            currentState: "DISCONNECTED",
+            previousState: revState,
+            reason: reason,
+            timeStamp: Date.now()
+          })
+            .then(function (response) {
+              console.log(response);
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
         }
         else if (curState === "DISCONNECTING") {
+        
+          console.log('DISCONNECTING', Date.now());
 
+          axios.post('http://localhost:8080/api/v1/connectionstate', {
+            uid: joinInfo.uid,
+            currentState: "DISCONNECTING",
+            previousState: revState,
+            reason: reason,
+            timeStamp: Date.now()
+          })
+            .then(function (response) {
+              console.log(response);
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
         }
         else if (curState === "RECONNECTING") {
+         
+          console.log('Test RECONNECTING', Date.now());
+
+          axios.post('http://localhost:8080/api/v1/connectionstate', {
+            uid: joinInfo.uid,
+            currentState: "RECONNECTING",
+            previousState: revState,
+            reason: reason,
+            timeStamp: Date.now()
+          })
+            .then(function (response) {
+              console.log(response);
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
 
         }
         console.log('curState', curState);
         console.log('revState', revState);
         console.log('reason', reason);
       })
-      
+     
       try{
         await client.join(config.appId, name, config.token, null)
         // await client.leave()
         var tempData = client
+
+        console.log('Connecting State',connectingState);
         videoCallData = {
           uid:tempData.uid,
         }
@@ -139,7 +215,8 @@ function VideoCall(props) {
 
         videoCallData = { ...videoCallData, ...inChannelInfo ,startTime : joinGatewayStartTime ,cname,cid}
 
-        console.log('client TTTTTT', videoCallData);
+        console.log(name);
+        console.log('client TTTTTT',tempData);
 
         // database.child('joiningInfo').push(
         //   videoCallData,

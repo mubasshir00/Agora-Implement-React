@@ -16,7 +16,6 @@ function ChannelForm(props) {
 
   return (
    <form className='join'>
-    
     <input type="text" placeholder="Enter Channel Name" 
     onChange={(e)=>channaleNameInputChane(e)}
     />
