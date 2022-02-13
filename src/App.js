@@ -12,20 +12,33 @@ function App() {
   const [channelData,setChannelData] = useState();
   const [usersData,setUsersData] = useState();
 
-  const [createChanelName, setCreateChanelName] = useState("")
+  // const [createChanelName, setCreateChanelName] = useState()
 
-  const [expirationTime,setExpirationTime] = useState("")
+  // const [expirationTime,setExpirationTime] = useState()
 
-  const createChaneelNameInputChange = (e) => {
-    setCreateChanelName(e.target.value)
+  // const initialValues = {createChanelName : "" , expirationTime:""}
+
+  const [formValues, setFormValues] = useState({ createChanelName: "", expirationTime: "" })
+
+  const handleChange = (e) =>{
+    e.preventDefault()
+    const {name,value} = e.target;
+    console.log(value);
+    setFormValues((prevState)=>({
+      ...prevState,
+      [name]:value
+    }))
   }
 
-  const createExpirationTimeChange = (e) =>{
-    setExpirationTime(e.target.value)
-  }
-
-  const createHandler = (createChanelName, expirationTime) =>{
-    console.log(createChanelName,expirationTime);
+  // const handleSubmit = e =>{
+  //   console.log(formValues.createChanelName);
+  //   console.log(formValues.expirationTime);
+  // }
+ 
+  const createHandler = (e) =>{
+    // e.preventDefault()
+    const {createChanelName,expirationTime} = formValues
+    // console.log(createChanelName,expirationTime);
 
     axios.post('http://localhost:8080/access_token',
     {
@@ -67,9 +80,18 @@ function App() {
     return (
       <div>
         <p>Create new Channel</p>
-        <input type="text" placeholder="Channel Name" onChange={(e) => createChaneelNameInputChange(e)} />
-        <input type="number" placeholder="Expiration time" onChange={(e) => createExpirationTimeChange(e)} />
-        <button onClick={(e) => createHandler(createChanelName, expirationTime)}>create</button>
+        <form>
+          <input type="text" name="createChanelName" value={formValues.createChanelName}
+            onChange={(e) => handleChange(e)}
+          />
+          <input type="number" name="expirationTime" value={formValues.expirationTime}
+          onChange={handleChange}
+          />
+          <button onClick={createHandler}>Submit Now</button>
+        </form>
+        {/* <input type="text" placeholder="Channel Name" onChange={(e) => createChaneelNameInputChange(e.target.value)} />
+        <input type="number" placeholder="Expiration time" onChange={(e) => createExpirationTimeChange(e.target.value)} />
+        <button onClick={(e) => createHandler(createChanelName, expirationTime)}>create</button> */}
       </div>
     )
   }
