@@ -6,7 +6,7 @@ function Controls(props) {
 const client = useClient();
 
 // console.log('CLient from COntrol',client);
-
+const [test,setTest] = useState('aaaaaaa')
 const {clientId,tracks,setStart,setInCall} = props;
     console.log(clientId);
 const [trackState, setTrackState] = useState({
@@ -57,9 +57,11 @@ const leaveChannel = async () =>{
     trackState.video ? 'Video On' : 'Video Off'
     }
     </button>
+    
     <button onClick={()=>leaveChannel()}>
         Leave
     </button>
+    
   </div>;
 }
 

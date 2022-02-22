@@ -12,7 +12,7 @@ function AgoraDashboard({ usersData, channelData}) {
       <div className='channelName'>
         {
           channelData?.map((i)=>{
-            console.log(i);
+            // console.log(i);
             return (
               <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
                 <button type="">{i.channelName}</button>

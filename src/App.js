@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Field, Form, Formik } from 'formik';
 import { useEffect, useState } from 'react';
 import AgoraDashboard from './AgoraDashboard';
 import './App.css';
@@ -12,9 +13,17 @@ function App() {
   const [channelData,setChannelData] = useState();
   const [usersData,setUsersData] = useState();
 
-  // const [createChanelName, setCreateChanelName] = useState()
+  const [createChanelName, setCreateChanelName] = useState()
+  const [expirationTime,setExpirationTime] = useState()
 
-  // const [expirationTime,setExpirationTime] = useState()
+  const handleChannelNameChange = (e) => {
+    setCreateChanelName(e.target.value);
+  }
+
+  const expirationTimeHandleChange = (e) =>{
+    setExpirationTime(e.target.value)
+  }
+
 
   // const initialValues = {createChanelName : "" , expirationTime:""}
 
@@ -30,15 +39,16 @@ function App() {
     }))
   }
 
-  // const handleSubmit = e =>{
-  //   console.log(formValues.createChanelName);
-  //   console.log(formValues.expirationTime);
-  // }
+  const handleSubmit = e =>{
+    e.preventDefault()
+    console.log(createChanelName);
+    console.log(expirationTime);
+  }
  
   const createHandler = (e) =>{
-    // e.preventDefault()
+    e.preventDefault()
     const {createChanelName,expirationTime} = formValues
-    // console.log(createChanelName,expirationTime);
+    console.log(createChanelName,expirationTime);
 
     axios.post('http://localhost:8080/access_token',
     {
@@ -74,20 +84,26 @@ function App() {
         console.log(error);
       })
       
-  },[])
+  },[formValues])
 
   const CreateChannelFunction = () =>{
     return (
       <div>
         <p>Create new Channel</p>
-        <form>
-          <input type="text" name="createChanelName" value={formValues.createChanelName}
-            onChange={(e) => handleChange(e)}
+        <form onSubmit={createHandler}>
+          <input 
+            
+
+            type="text" value={formValues.createChanelName} name="createChanelName" onChange={handleChange}
           />
-          <input type="number" name="expirationTime" value={formValues.expirationTime}
-          onChange={handleChange}
+          <input 
+            name="expirationTime"
+       type="number" 
+            // autoFocus="autoFocus"
+          value={formValues.expirationTime}
+            onChange={handleChange}
           />
-          <button onClick={createHandler}>Submit Now</button>
+          <button >Submit Now</button>
         </form>
         {/* <input type="text" placeholder="Channel Name" onChange={(e) => createChaneelNameInputChange(e.target.value)} />
         <input type="number" placeholder="Expiration time" onChange={(e) => createExpirationTimeChange(e.target.value)} />

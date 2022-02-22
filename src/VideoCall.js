@@ -7,12 +7,33 @@ import database from './firebase'
 import { ref, set,push } from 'firebase/database';
 import { AgoraRTCRemoteUser, IAgoraRTCRemoteUser} from 'agora-rtc-sdk-ng';
 import axios from 'axios';
+import { useChannelRTM, useChannelRTMInstance, useClientRTM, useClientRTMInstance } from './configRTM';
 // const database = getDatabase();
+
+import AgoraRTM from 'agora-rtm-sdk';
+
 
 function VideoCall(props) {
 
-  console.log('remoteClient', remoteClient);
+  // console.log('remoteClient', remoteClient);
 
+  const clientRTM = useClientRTM();
+  const testChannel = useChannelRTM(clientRTM)
+
+  // console.log('clientRTM -------',clientRTM);
+
+
+  const clientRTMInstance = useClientRTMInstance;
+
+  console.log('useClientRTMInstance', useClientRTMInstance);
+
+  console.log('clientRTMInstance', clientRTMInstance);
+
+  // const testChannel = useChannelRTMInstance
+
+  const uid = '12345'
+
+  // console.log('clientRTM', clientRTM.login());
   let videoCallData = {}
   let [connectingState,setConnectingState] = useState([])
   const { setInCall, channelName} = props
@@ -21,7 +42,37 @@ function VideoCall(props) {
   const client = useClient();
   const {ready,tracks} = useMicrophoneAndCameraTracks()
   
+  const [inputText,setInputText] = useState('')
+  const [texts,setTexts] = useState([]);
   // console.log('aaa',tracks);
+
+  const { _gateway } = { ...client }
+  const { inChannelInfo, joinInfo, joinGatewayStartTime } = { ..._gateway }
+
+  // console.log('client.login',client.login)
+  let login = async() =>{
+    await clientRTM.login({uid})
+    await testChannel.join();
+
+    testChannel.on('ChannelMessage',(msg,uid)=>{
+      setTexts((previous)=>{
+        return [...previous,{msg,uid}]
+      })
+    })
+    
+  }
+
+  const sendMsg = (text) =>{
+    let message = clientRTMInstance.createMessage({
+      text , messageType :'TEXT'
+    }) 
+     testChannel.sendMessage(message)
+    setTexts((previous)=>{
+      return [...previous,{msg:{text},uid:joinInfo.uid}]
+    })
+    setInputText('')
+  }
+
 
   useEffect(()=>{
     let init = async (name) =>{
@@ -30,6 +81,9 @@ function VideoCall(props) {
       //   console.log('teeeeeeeeest');
       // })
 
+      testChannel.on('ChannelMessage',(message)=>{
+        console.log('message', message);
+      })
 
       client.on("user-published",async(user,mediaType)=>{
         // console.log('user',user);
@@ -268,6 +322,7 @@ function VideoCall(props) {
 
   },[channelName,client,ready,tracks])
   // console.log('users', users);
+  console.log('texts',texts);
   return (
     <Grid container direction="column" style={{height:"100%"}}>
       <Grid item style={{height:"5%"}}>
@@ -277,7 +332,30 @@ function VideoCall(props) {
       )
       }
       </Grid>
-      {/* <p> {users}</p> */}
+      
+      <div style={{ display: 'flex', flex: 10, flexDirection: 'column', margin: 20, marginLeft: '10%', marginRight: '10%', paddingRight: 10, paddingLeft: 10, overflowY: 'scroll' }}>
+        <div>
+          <p>details msge</p>
+        </div>
+        {
+        texts?.map((i)=>{
+          console.log('i i',i.msg.text);
+          <div key={Math.random()*Date.now()}
+            style={{ backgroundColor: '#007bff50' , margin: 10, width: '50%', marginLeft:'', padding: 12, borderRadius: 10 }}
+          >
+            <div>kkkkkkkkkkkkkkkkkkkkkkkk</div>
+            <div>
+              {i?.msg?.text}
+            </div>
+          </div>
+        })
+        }
+      </div>
+
+      <input value={inputText} onChange={e=>setInputText(e.target.value)} type="text"/>
+
+      <button onClick={()=>sendMsg(inputText)}>Send Message</button>
+
       <Grid item style={{height:"95%"}}>
         {start && tracks && <Videos tracks={tracks} users={users}/>}
       </Grid>
