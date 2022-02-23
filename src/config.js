@@ -8,11 +8,11 @@ import AgoraRTC, {
 
 // import { IAgoraRTCRemoteUser} from 'agora-rtc-sdk-ng'
 
-const appId = "14d4edd9107f4e0ca7a54ebde7f3dd70"
+const appId = "d830e79c7c344e31924cc6b372a8e5f5"
 
 const token = "00614d4edd9107f4e0ca7a54ebde7f3dd70IAD/vRuvjihterO9Lg0k427Lp4kfZ9Kpob9DMfxZBHH0e2TNKL8AAAAAIgB0jUCUfNEVYgQAAQB80RViAgB80RViAwB80RViBAB80RVi"
 
-export const config = { mode: "rtc", codec: "vp8" , appId:appId , token:token}
+export const config = { mode: "rtc", codec: "vp8" , appId:appId }
 
 export const useClient = createClient(config);
 export const useChannel = createChannel('main');

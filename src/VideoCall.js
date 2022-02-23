@@ -11,6 +11,7 @@ import { useChannelRTM, useChannelRTMInstance, useClientRTM, useClientRTMInstanc
 // const database = getDatabase();
 
 import AgoraRTM from 'agora-rtm-sdk';
+import TextDisplay from './TextDisplay';
 
 
 function VideoCall(props) {
@@ -23,15 +24,7 @@ function VideoCall(props) {
   // console.log('clientRTM -------',clientRTM);
 
 
-  const clientRTMInstance = useClientRTMInstance;
-
-  console.log('useClientRTMInstance', useClientRTMInstance);
-
-  console.log('clientRTMInstance', clientRTMInstance);
-
   // const testChannel = useChannelRTMInstance
-
-  const uid = '12345'
 
   // console.log('clientRTM', clientRTM.login());
   let videoCallData = {}
@@ -44,7 +37,9 @@ function VideoCall(props) {
   
   const [inputText,setInputText] = useState('')
   const [texts,setTexts] = useState([]);
+  const [isLoggedIn,setLoggedIn] = useState(false)
   // console.log('aaa',tracks);
+  const [uid,setUid] = useState('');
 
   const { _gateway } = { ...client }
   const { inChannelInfo, joinInfo, joinGatewayStartTime } = { ..._gateway }
@@ -59,16 +54,28 @@ function VideoCall(props) {
         return [...previous,{msg,uid}]
       })
     })
-    
+
+    testChannel.on('MemberJoined',(memberId)=>{
+      console.log('New Member: ', memberId)
+    })
+    setLoggedIn(true);
   }
 
-  const sendMsg = (text) =>{
-    let message = clientRTMInstance.createMessage({
+  let logout = async()=>{
+    testChannel.leave()
+    client.logout()
+    testChannel.removeAllListeners()
+    client.removeAllListeners()
+    setLoggedIn(false)
+  }
+
+  const sendMsg = async (text) =>{
+    let message = clientRTM.createMessage({
       text , messageType :'TEXT'
     }) 
-     testChannel.sendMessage(message)
+    await testChannel.sendMessage(message)
     setTexts((previous)=>{
-      return [...previous,{msg:{text},uid:joinInfo.uid}]
+      return [...previous,{msg:{text},uid}]
     })
     setInputText('')
   }
@@ -81,9 +88,6 @@ function VideoCall(props) {
       //   console.log('teeeeeeeeest');
       // })
 
-      testChannel.on('ChannelMessage',(message)=>{
-        console.log('message', message);
-      })
 
       client.on("user-published",async(user,mediaType)=>{
         // console.log('user',user);
@@ -252,7 +256,7 @@ function VideoCall(props) {
       })
      
       try{
-        await client.join(config.appId, name, config.token, null)
+        await client.join(config.appId, name, null)
         // await client.leave()
         var tempData = client
 
@@ -335,21 +339,33 @@ function VideoCall(props) {
       
       <div style={{ display: 'flex', flex: 10, flexDirection: 'column', margin: 20, marginLeft: '10%', marginRight: '10%', paddingRight: 10, paddingLeft: 10, overflowY: 'scroll' }}>
         <div>
-          <p>details msge</p>
-        </div>
-        {
-        texts?.map((i)=>{
-          console.log('i i',i.msg.text);
-          <div key={Math.random()*Date.now()}
-            style={{ backgroundColor: '#007bff50' , margin: 10, width: '50%', marginLeft:'', padding: 12, borderRadius: 10 }}
-          >
-            <div>kkkkkkkkkkkkkkkkkkkkkkkk</div>
-            <div>
-              {i?.msg?.text}
-            </div>
+          <div style={{ display: 'flex', margin: 'auto' }}>
+            <p style={{ marginRight: 5 }}>Enter a user ID: </p>
+            <input style={{ marginRight: 5 }} type='text' disabled={isLoggedIn} value={uid} onChange={e => setUid(e.target.value)} />
+            <button disabled={!uid}  onClick={isLoggedIn ? logout : login}>{isLoggedIn ? 'Logout' : 'Login'}</button>
           </div>
-        })
-        }
+
+          {
+            texts?.map((i) => {
+              console.log('i i', i.msg.text);
+             return(
+               <div key={Math.random() * Date.now()}
+               style={{display:'flex',flexDirection:'row'}}
+               >
+                 
+                 <p>
+                   {i.msg.text} 
+                 </p>
+                 <p>
+                   - <p>{i.uid}</p>
+                 </p>
+               </div>
+             )
+            })
+          }
+          {/* <TextDisplay texts={texts}/> */}
+        </div>
+        
       </div>
 
       <input value={inputText} onChange={e=>setInputText(e.target.value)} type="text"/>

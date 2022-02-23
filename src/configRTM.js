@@ -1,7 +1,8 @@
 import { createChannel, createClient, RtmMessage } from 'agora-rtm-react'
 import AgoraRTM from 'agora-rtm-sdk'
 
-const appID =  '14d4edd9107f4e0ca7a54ebde7f3dd70'
+const appID =  'd830e79c7c344e31924cc6b372a8e5f5'
+
 export const useClientRTM = createClient(appID);
 
 // export const channelName = "main"
