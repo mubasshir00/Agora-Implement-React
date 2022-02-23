@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import React from 'react';
 import { appId } from './config';
 
@@ -15,14 +16,16 @@ function ChannelForm(props) {
   }
 
   return (
-   <form className='join'>
-    <input type="text" placeholder="Enter Channel Name" 
-    onChange={(e)=>channaleNameInputChane(e)}
-    />
-    <button onClick={(e) => joinHandler(e)}>
-        Join
-    </button>
-   </form>
+   <div className='form'>
+          <form className='join'>
+              <input style={{fontSize:30}} type="text" placeholder="Enter Channel Name"
+                onChange={(e) => channaleNameInputChane(e)}
+              />
+              <Button color="success" variant="contained" onClick={(e) => joinHandler(e)}>
+                Join
+              </Button>
+          </form>
+   </div>
   );
 }
 

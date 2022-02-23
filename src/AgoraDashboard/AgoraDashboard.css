@@ -1,0 +1,7 @@
+.container{
+   background-color:darkblue; 
+   width: 20rem;
+   overflow-y: scroll;
+   height: 100vh;
+   color: white;
+}

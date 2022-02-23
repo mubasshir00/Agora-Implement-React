@@ -22,10 +22,6 @@ function VideoCall(props) {
   const clientRTM = useClientRTM();
   const testChannel = useChannelRTM(clientRTM)
 
-  // console.log('clientRTM -------',clientRTM);
-  // const testChannel = useChannelRTMInstance
-  // console.log('clientRTM', clientRTM.login());
-
   let videoCallData = {}
   let [connectingState,setConnectingState] = useState([])
   const { setInCall, channelName} = props
@@ -46,6 +42,7 @@ function VideoCall(props) {
   const { inChannelInfo, joinInfo, joinGatewayStartTime } = { ..._gateway }
 
   // console.log('client.login',client.login)
+  // RTM authentication
   let login = async() =>{
     await clientRTM.login({uid})
     await testChannel.join();
@@ -109,15 +106,8 @@ function VideoCall(props) {
   }
   console.log('jsonQna', jsonQna);
 
-  // const { questions, answer} = qna
-
   useEffect(()=>{
     let init = async (name) =>{
-
-      // remoteClient.on("user-joined",async(user,mediaType)=>{
-      //   console.log('teeeeeeeeest');
-      // })
-
 
       client.on("user-published",async(user,mediaType)=>{
         // console.log('user',user);
@@ -157,32 +147,10 @@ function VideoCall(props) {
         })
       })
 
-      // client.on("user-joined",(user)=>{
-      //   setUsers(()=>{
-      //     return user.uid
-      //   })
-      // })
-      // _joinInfo
-
       client.on("connection-state-change", async (curState, revState, reason) => {
         const {_gateway} =  {...client}
         const { inChannelInfo, joinInfo, joinGatewayStartTime } = { ..._gateway }
-        // console.log('state change', joinInfo.uid);
-        //SDK is connecting to the server
-
-        // let connectionStateData = {
-        //   uid: joinInfo.uid,
-        //   currentState : curState,
-        //   timeStamp : Date.now()
-        // }
-        
-        // axios.post('http://localhost:8080/api/v1/connectionstate', connectionStateData)
-        //   .then(function (response) {
-        //     console.log(response);
-        //   })
-        //   .catch(function (error) {
-        //     console.log(error);
-        //   })
+       
         
         if (curState === "CONNECTING") {
 
@@ -203,6 +171,7 @@ function VideoCall(props) {
           })
 
         }
+        
         //connecting to the server and join a channel
         else if (curState === "CONNECTED") {
       
@@ -305,22 +274,6 @@ function VideoCall(props) {
         console.log(name);
         console.log('client TTTTTT',tempData);
 
-        // database.child('joiningInfo').push(
-        //   videoCallData,
-        //   err=>{
-        //     if(err){
-        //       console.log(err);
-        //     }
-        //   }
-        // )
-
-        // const db = getDatabase()
-
-        // push(ref(database,'joiningInfo'),videoCallData)
-        // console.log(client.uid);
-        // console.log('client', joinInfo );
-        // var tempData = client.uid
-        // console.log('aalll allll',client);
 
         axios.post('http://localhost:8080/api/v1/users', videoCallData)
         .then(function(response){
@@ -333,12 +286,6 @@ function VideoCall(props) {
       } catch(error) {
         console.log("Error");
       }
-
-      // try {
-      //   await client.leave()
-      // } catch (error){
-      //   console.log("Error");
-      // }
 
     if(tracks) await client.publish([tracks[0],tracks[1]]);
     setStart(true)

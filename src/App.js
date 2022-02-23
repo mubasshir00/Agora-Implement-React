@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Field, Form, Formik } from 'formik';
 import { useEffect, useState } from 'react';
-import AgoraDashboard from './AgoraDashboard';
+import AgoraDashboard from './AgoraDashboard/AgoraDashboard';
 import './App.css';
 import ChannelForm from './ChannelForm';
 import VideoCall from './VideoCall';
@@ -115,11 +115,7 @@ function App() {
   return (
     <div className='App' style={{height:"100%"}}>
 
-      {
-        inCall ? '' : <CreateChannelFunction/>
-      }
-
-      {inCall ? <VideoCall setInCall={setInCall} channelName={channelName} /> : <ChannelForm setInCall={setInCall} setChannelName={setChannelName} />}
+    {inCall ? <VideoCall setInCall={setInCall} channelName={channelName} /> : <ChannelForm setInCall={setInCall} setChannelName={setChannelName} />}
 
     {/* <VideoCall/> */}
 

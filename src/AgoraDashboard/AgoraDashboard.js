@@ -1,10 +1,11 @@
-import React from 'react'
+import React from 'react';
+import './AgoraDashboard.css';
 
 function AgoraDashboard({ usersData, channelData}) {
   // console.log(usersData);
   // console.log(channelData);
   return (
-    <div>
+    <div className='container'>
       <div>
         <p>Total Channel {channelData?.length} </p>
         <p>Total User {usersData?.length}</p>

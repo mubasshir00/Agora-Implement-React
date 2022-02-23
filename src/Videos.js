@@ -6,29 +6,16 @@ import Controls from './Controls';
 
 import { IAgoraRTCRemoteUser } from 'agora-rtc-sdk-ng'
 import ControlRemoteUser from './ControlRemoteUser';
-// import { useClientRTMInstance, useClientRTM } from './configRTM';
-
-// import { createChannel, createClient, RtmMessage } from 'agora-rtm-react'
-
 
 function Videos(props) {
-//   console.log('Videos  tacks',props);
 
-//   console.log('remoteClient', remoteClient);
   const [removeMessage,setRemoveMessage] = useState("")
   let {users} = props;
 
   const client = useClient()
 
-  //Agora RTM
-  // const clientRTM = useClientRTM()
-
-  // console.log('RTM Client',clientRTM);
-
-
-  // const testChannel = useChannel(client)
   const {ready,tracks}= useMicrophoneAndCameraTracks();
-//   console.log('oooooooooooo',users);
+
   const [test,setTest] = useState('');
   const [testClick, setTestClick] = useState('')
 
@@ -40,7 +27,6 @@ function Videos(props) {
   }, [users, tracks,client,ready])
 
   console.log('client -- ', { ...client});
-  // console.log('testChannel ----',testChannel);
 
   const mute = async(type) =>{
       if(type === "audio"){
@@ -53,7 +39,6 @@ function Videos(props) {
   const removeFromChannl = async(user) =>{
     await client.unsubscribe(user)
     await client.leave();
-    // client.removeAllListeners();
     users = users.filter((User)=>User.uid !== user.uid)
 
    console.log('users', users);
@@ -69,9 +54,6 @@ function Videos(props) {
 
         console.log(test);
         
-        // let channel = client.createChannel("demoChannel")
-        // console.log(channel);
-
         client.on("ChannelMessage",async(user)=>{
             console.log('iiiiiii',user);
             setTest('ppppppppppppppppp')
@@ -93,7 +75,6 @@ function Videos(props) {
 
           <button onClick={() => customEvent("Welcome")}>Custom Event {test}</button>
 
-        {/* <p>asasasasas</p> */}
         {
         users.length > 0 && 
         users.map((user)=>{
@@ -118,16 +99,6 @@ function Videos(props) {
                 <div>
                     <p>{removeMessage}</p>
                 </div>
-
-                {/* <ControlRemoteUser/> */}
-                {/* <p>asdsdsd dfede edfe</p> */}
-                        {/* <Grid item style={{ height: "5%" }}>
-                            {
-                                ready && tracks && (
-                                    <Controls tracks={tracks} />
-                                )
-                            }
-                        </Grid> */}
 
                 <AgoraVideoPlayer 
                 videoTrack={user.videoTrack}

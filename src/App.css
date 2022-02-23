@@ -42,3 +42,13 @@
   display: grid;
   grid-template-columns: repeat(2,1fr);
 } */
+
+.form{
+  display: flex;
+  /* width: 80vw; */
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: darkblue;
+}
+
