@@ -14,7 +14,7 @@ function AgoraDashboard({ usersData, channelData}) {
           channelData?.map((i)=>{
             // console.log(i);
             return (
-              <div style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
+              <div >
                 <button type="">{i.channelName}</button>
                 <p>Expiration  {i.expireTime}</p>
                 <p>Created at : {i.createdTime}</p>

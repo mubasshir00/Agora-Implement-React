@@ -12,6 +12,7 @@ import { useChannelRTM, useChannelRTMInstance, useClientRTM, useClientRTMInstanc
 
 import AgoraRTM from 'agora-rtm-sdk';
 import TextDisplay from './TextDisplay';
+import Qna from './Qna';
 
 
 function VideoCall(props) {
@@ -22,11 +23,9 @@ function VideoCall(props) {
   const testChannel = useChannelRTM(clientRTM)
 
   // console.log('clientRTM -------',clientRTM);
-
-
   // const testChannel = useChannelRTMInstance
-
   // console.log('clientRTM', clientRTM.login());
+
   let videoCallData = {}
   let [connectingState,setConnectingState] = useState([])
   const { setInCall, channelName} = props
@@ -40,6 +39,8 @@ function VideoCall(props) {
   const [isLoggedIn,setLoggedIn] = useState(false)
   // console.log('aaa',tracks);
   const [uid,setUid] = useState('');
+
+  const [qna,setQna] = useState();
 
   const { _gateway } = { ...client }
   const { inChannelInfo, joinInfo, joinGatewayStartTime } = { ..._gateway }
@@ -80,6 +81,35 @@ function VideoCall(props) {
     setInputText('')
   }
 
+  const startQuiz = async () =>{
+  await  axios.post('http://localhost:8080/qna')
+    .then(function(response){
+      console.log(response);
+      questionQuiz(response?.data)
+    })
+    .catch(function(error){
+      console.log(error);
+    })
+  }
+
+  const questionQuiz = async (i) => {
+    const text = JSON.stringify(i)
+    let message = clientRTM.createMessage({
+      text,messageType:'TEXT'
+    })
+    await testChannel.sendMessage(message)
+    console.log('text', text);
+    setQna({msg:{text},uid})
+  }
+
+  console.log('qnaaa', qna?.msg?.text);
+  let jsonQna ;
+  if(qna!==undefined){
+   jsonQna = JSON.parse(qna?.msg?.text)
+  }
+  console.log('jsonQna', jsonQna);
+
+  // const { questions, answer} = qna
 
   useEffect(()=>{
     let init = async (name) =>{
@@ -91,8 +121,7 @@ function VideoCall(props) {
 
       client.on("user-published",async(user,mediaType)=>{
         // console.log('user',user);
-
-
+        
         await client.subscribe(user,mediaType)
 
         if(mediaType === "video"){
@@ -327,6 +356,7 @@ function VideoCall(props) {
   },[channelName,client,ready,tracks])
   // console.log('users', users);
   console.log('texts',texts);
+  
   return (
     <Grid container direction="column" style={{height:"100%"}}>
       <Grid item style={{height:"5%"}}>
@@ -345,9 +375,33 @@ function VideoCall(props) {
             <button disabled={!uid}  onClick={isLoggedIn ? logout : login}>{isLoggedIn ? 'Logout' : 'Login'}</button>
           </div>
 
+          <button onClick={() => startQuiz()}>Quiz Start</button>
+
+          <p>{jsonQna?.questions}</p>
+          <div>
+            
+            {/* if(qna!==undefined){
+              jsonQna = JSON.parse(qna?.msg?.text)
+            } */}
+            {
+            qna!==undefined ? <Qna qna={qna}/> :'b'  
+            }
+            {/* {
+              jsonQna?.answer?.map((i)=>{
+                const { auid, answer} = i;
+                return(
+                  <div>
+                    <button>Y</button>
+                    <p>{answer}</p>
+                  </div>
+                )
+              })
+            } */}
+          </div>
+
           {
             texts?.map((i) => {
-              console.log('i i', i.msg.text);
+              console.log('text msge', i.msg.text);
              return(
                <div key={Math.random() * Date.now()}
                style={{display:'flex',flexDirection:'row'}}
