@@ -22,6 +22,9 @@ function VideoCall(props) {
   const clientRTM = useClientRTM();
   const testChannel = useChannelRTM(clientRTM)
 
+  console.log('Client RTM --- ',clientRTM);
+  console.log('Test Channel ------',testChannel);
+
   let videoCallData = {}
   let [connectingState,setConnectingState] = useState([])
   const { setInCall, channelName} = props
@@ -106,8 +109,18 @@ function VideoCall(props) {
   }
   console.log('jsonQna', jsonQna);
 
+  testChannel.on("testEventRTM1", () => {
+    console.log('Test Event Outside UseEffect');
+  })
+
+  
+
   useEffect(()=>{
     let init = async (name) =>{
+      
+      testChannel.on("testEventRTM2",()=>{
+        console.log('Test Event');
+      })
 
       client.on("user-published",async(user,mediaType)=>{
         // console.log('user',user);
