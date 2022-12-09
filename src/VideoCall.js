@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { config,useClient,useMicrophoneAndCameraTracks,channelName, remoteClient } from './config';
+import { config,useClient,useMicrophoneAndCameraTracks,channelName, remoteClient, useScreenVideoTrack } from './config';
 import Controls from './Controls';
 import Videos from './Videos';
 import database from './firebase'
@@ -22,8 +22,9 @@ function VideoCall(props) {
   const clientRTM = useClientRTM();
   const testChannel = useChannelRTM(clientRTM)
 
-  console.log('Client RTM --- ',clientRTM);
-  console.log('Test Channel ------',testChannel);
+  // console.log('Client RTM --- ',clientRTM);
+  // console.log('Test Channel ------',testChannel);
+  console.log('useScreenVideoTrack(),', useScreenVideoTrack());
 
   let videoCallData = {}
   let [connectingState,setConnectingState] = useState([])

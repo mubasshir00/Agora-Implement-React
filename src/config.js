@@ -1,8 +1,17 @@
-import { AgoraVideoPlayer, createClient, createMicrophoneAndCameraTracks  } from "agora-rtc-react";
+import { AgoraVideoPlayer, createClient, createMicrophoneAndCameraTracks ,createScreenVideoTrack } from "agora-rtc-react";
 import { createChannel, RtmMessage } from 'agora-rtm-react'
 
 import AgoraRTC, {
-    IAgoraRTCClient, IAgoraRTCRemoteUser, MicrophoneAudioTrackInitConfig, CameraVideoTrackInitConfig, IMicrophoneAudioTrack, ICameraVideoTrack, ILocalVideoTrack, ILocalAudioTrack, IRemoteAudioTrack
+  IAgoraRTCClient,
+  IAgoraRTCRemoteUser,
+  MicrophoneAudioTrackInitConfig,
+  CameraVideoTrackInitConfig,
+  IMicrophoneAudioTrack,
+  ICameraVideoTrack,
+  ILocalVideoTrack,
+  ILocalAudioTrack,
+  IRemoteAudioTrack,
+  ScreenVideoTrackInitConfig,
 } from 'agora-rtc-sdk-ng';
 
 
@@ -21,10 +30,14 @@ export const remoteClient = AgoraRTC.createClient(IAgoraRTCRemoteUser)
 
 export const useMicrophoneAndCameraTracks = createMicrophoneAndCameraTracks()
 
+export const useScreenVideoTrack = createScreenVideoTrack();
+
 // export const remoteUser = IAgoraRTCClient()
 // export const remoteAudioTrack = RemoteAudioTrackStats;
 // export const remoteVideoTrack = RemoteVideoTrackStats;
 // export const iagoraRemoteUser = IAgoraRTCRemoteUser;
 // let channel = client.createChannel("demoChannel")
+
+
 
 export const channelName = "main"
